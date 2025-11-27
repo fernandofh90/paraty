@@ -1,0 +1,7 @@
+{
+  "name": "Explore Paraty - Guia Digital",
+  "description": "Interactive digital guide for Paraty totems and mobile devices, featuring maps, local businesses, and advertiser management.",
+  "requestFramePermissions": [
+    "geolocation"
+  ]
+}
