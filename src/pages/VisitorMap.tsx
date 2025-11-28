@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { MapContainer, TileLayer, Marker, useMap, ZoomControl } from 'react-leaflet';
 import L from 'leaflet';
-import { Search, Map as MapIcon, ChevronLeft, Phone, Globe, Navigation } from 'lucide-react';
+import { Search, Map as MapIcon, ChevronLeft, Phone, Globe, Navigation, User } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { PARATY_CENTER, CATEGORY_ICONS } from '../constants';
 import { Category, Place } from '../types';
 import { AdFooter } from '../components/AdFooter';
@@ -42,6 +43,7 @@ const MapController = ({ center }: { center: { lat: number, lng: number } }) => 
 };
 
 export const VisitorMap: React.FC = () => {
+  const navigate = useNavigate();
   const { t } = useLanguage();
   const { places } = usePlaces();
   const [selectedCategory, setSelectedCategory] = useState<Category | 'ALL'>('ALL');
@@ -66,10 +68,10 @@ export const VisitorMap: React.FC = () => {
   const categories = Object.values(Category) as Category[];
 
   return (
-    <div className="flex flex-col h-full w-full bg-slate-100">
+    <div className="flex flex-col h-full w-full bg-slate-100 relative">
       
       {/* Top Bar / Search */}
-      <div className="relative z-20 bg-white shadow-md p-4 flex items-center gap-4 shrink-0">
+      <div className="relative z-[2000] bg-white shadow-md p-4 flex items-center gap-4 shrink-0">
          <div className="relative flex-1">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
             <input 
@@ -81,6 +83,13 @@ export const VisitorMap: React.FC = () => {
             />
          </div>
          <button 
+           className="p-3 bg-white text-gray-600 border border-gray-200 rounded-xl shadow-sm hover:bg-gray-50 active:scale-95 transition"
+           onClick={() => navigate('/advertiser/login')}
+           title="Área do Anunciante"
+         >
+            <User className="w-6 h-6" />
+         </button>
+         <button 
            className="p-3 bg-blue-600 text-white rounded-xl shadow-lg hover:bg-blue-700 active:scale-95 transition"
            onClick={() => { setSelectedCategory('ALL'); setSearchQuery(''); setSelectedPlace(null); }}
          >
@@ -89,14 +98,14 @@ export const VisitorMap: React.FC = () => {
       </div>
 
       {/* Main Content Area */}
-      <div className="flex-1 relative overflow-hidden">
+      <div className="flex-1 relative overflow-hidden z-0">
         
         {/* Map */}
         <MapContainer 
           center={[PARATY_CENTER.lat, PARATY_CENTER.lng]} 
           zoom={15} 
           zoomControl={false}
-          className="w-full h-full"
+          className="w-full h-full z-0"
           style={{ background: '#e5e7eb' }}
         >
           <TileLayer
@@ -120,8 +129,8 @@ export const VisitorMap: React.FC = () => {
 
         {/* Categories Floating Bar (Bottom) */}
         {!selectedPlace && (
-          <div className="absolute bottom-4 left-0 right-0 z-[1000] px-4 overflow-x-auto no-scrollbar pb-2">
-            <div className="flex gap-2 w-max mx-auto">
+          <div className="absolute bottom-4 left-0 right-0 z-[1000] px-4 overflow-x-auto no-scrollbar pb-2 pointer-events-none">
+            <div className="flex gap-2 w-max mx-auto pointer-events-auto">
               <button
                 onClick={() => setSelectedCategory('ALL')}
                 className={`px-5 py-3 rounded-full shadow-lg text-sm font-bold whitespace-nowrap transition-all ${selectedCategory === 'ALL' ? 'bg-blue-600 text-white scale-105' : 'bg-white text-gray-700 hover:bg-gray-50'}`}
