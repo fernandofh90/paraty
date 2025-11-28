@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { MapPin, ArrowRight } from 'lucide-react';
+import { MapPin, ArrowRight, Store } from 'lucide-react';
 import { useLanguage, Language } from '../contexts/LanguageContext';
 
 export const Welcome: React.FC = () => {
@@ -9,6 +9,11 @@ export const Welcome: React.FC = () => {
 
   const handleStart = () => {
     navigate('/map');
+  };
+
+  const handlePartnerAccess = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    navigate('/advertiser/login');
   };
 
   const handleLanguageSelect = (e: React.MouseEvent, lang: Language) => {
@@ -66,8 +71,16 @@ export const Welcome: React.FC = () => {
         </div>
       </div>
 
-      <div className="absolute bottom-4 text-xs opacity-50">
-        exploreparaty.com.br
+      {/* Footer / Partner Link */}
+      <div className="absolute bottom-6 w-full flex justify-between items-end px-8 text-xs opacity-80 z-20">
+        <span>exploreparaty.com.br</span>
+        <button 
+          onClick={handlePartnerAccess}
+          className="flex items-center gap-2 bg-white/20 px-3 py-1.5 rounded-lg hover:bg-white/30 transition backdrop-blur-sm border border-white/20"
+        >
+          <Store className="w-3 h-3" />
+          <span>Área do Parceiro</span>
+        </button>
       </div>
     </div>
   );
